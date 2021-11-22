@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.docker
+
+# Python
+dsci_dashboard/__pycache__/
+dsci_dashboard/*/__pycache__/
+dsci_dashboard/*/*/__pycache__/
+dsci_dashboard/*/*/*/__pycache__/
+dsci_dashboard/*/*/*/*/__pycache__/
+
+# Python
+app/__pycache__/
+app/*/__pycache__/
+app/*/*/__pycache__/
+app/*/*/*/__pycache__/
+app/*/*/*/*/__pycache__/
+.env/
+.venv/
+venv/
+
+# dev files
+dev/
+
+# macbook
+.DS_Store
