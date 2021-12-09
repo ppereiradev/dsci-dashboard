@@ -3,7 +3,102 @@ html, body {
     /*background-color:#f4f3ef;*/
     background-color:#303140;
     font-family: Montserrat,Helvetica Neue,Arial,sans-serif;
+    color: white;
 }
+
+/*** FIRST ROW ***/
+.row-dashboard {
+    margin: 0;
+}
+
+.row-dashboard .col {
+    padding: 0px;
+}
+
+.row-dashboard .card-body-dashboard {
+    padding-bottom: 0px;
+}
+/*** CARDS ***/
+.card-dashboard {
+    height: 100%;
+}
+
+/*** ODS ***/
+.ods-html-img { 
+    width: 100%;
+}
+
+.ods-html-p { 
+    text-align: center;
+}
+
+.row-dashboard .col .ods-html-img {
+    padding: 0% 2%;
+}
+
+.row-dashboard .col .div-table {
+    width: 95%;
+    margin: auto;
+    font-size: 10px;
+}
+
+.row-dashboard .col .table-dark {
+    color: #fff;
+    background-color: #303140;
+}
+
+.row-dashboard .col .table-dark tr {
+    background-color: rgba(255,255,255,0.05);
+}
+
+.row-dashboard .col .table-dark th {
+    border-color: #303140;
+}
+
+.row-dashboard .col .table-dark td {
+    border-color: #303140;
+}
+
+.row-dashboard .col .table-dark td:nth-child(2) {
+    text-align: right;
+}
+
+.row-dashboard .col .table-dark td:nth-child(3) {
+    text-align: right;
+}
+
+.row-dashboard .col .table-dark td:nth-child(4) {
+    text-align: right;
+}
+
+.row-dashboard .col .table-dark td:nth-child(5) {
+    text-align: right;
+}
+
+.row-dashboard .col .table-dark td:nth-child(6) {
+    text-align: right;
+}
+
+.row-dashboard .col .table-dark td:nth-child(7) {
+    text-align: right;
+}
+
+/*** SAUDE E QUALIDADE DE VIDA ***/
+.card-dashboard .card-body-dashboard .saude-html-div {
+    text-align: center;
+}
+
+.card-dashboard .card-body-dashboard .saude-html-img {
+    width: 50%;
+}
+
+
+
+
+
+
+
+
 
 .nav-tabs .nav-link.active {
     font-weight:bold;
@@ -254,11 +349,6 @@ circle {
 }
 
 
-
-
-
-
-
 .label {
     color:white;
 }
@@ -272,72 +362,3 @@ circle {
     stroke: white;
     stroke-width: 5px;
 }
-
-
-
-
-
-/***************************** DIRETORIA *****************************/
-.cards-content-info-header:first-of-type {
-    font-weight:bold;
-    color:#252422;
-    border-bottom: 0.5px solid lightgray;
-    height: 35px;
-    margin: 0px;
-    padding: 5px 15px;
-    /*border-radius:10px 10px;*/
-}
-
-.cards-content-info-body:first-of-type {
-    font-size:2em;
-    text-align:center;
-    color:#252422;
-    border-radius:5px 5px;
-
-}
-
-.cards-info-body {
-    display:table;
-    vertical-align:middle;
-    width:100%;
-    padding: 0px;
-}
-
-.div-icon-card-body {
-    display:table-cell;
-    vertical-align:middle;
-    text-align: center;
-    
-}
-
-.div-content-card-body {
-    display:table-cell;
-    vertical-align:middle;
-    height: 40px;
-}
-
-.cards-info {
-    /*border-left: 0.5rem solid 	#252422;*/
-    border-radius: 5px 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    
-}
-
-.cards-summary {
-    height: 95px;
-    /*border: 0.1px solid 	#252422;*/
-    /*border-left: 0.5rem solid 	#252422;*/
-}
-
-.cards-content-chart-header:first-of-type {
-    font-weight:bold;
-    color:#252422;
-    border-radius:10px 10px;
-}
-
-.cards-chart:first-of-type {
-    height:100%;
-    border-radius: 15px 15px;
-}
-/****************************************************************/

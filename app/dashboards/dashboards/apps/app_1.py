@@ -57,7 +57,110 @@ def app_content(charts, clean_data):
     -------
     html.Div
         Div component of the dash_html_components.html.Div.
-    """    
+    """ 
+    df_mobilidade = pd.DataFrame(
+        {
+            "": ["Entrada Hoje", "Saída Hoje", "Entrada Ontem", "Saída Ontem",],
+            "Pessoas": ["173", "157", "234", "234"],
+            "Bicicletas": ["13", "15", "23", "23"],
+            "Motocicletas": ["18", "15", "23", "23"],
+            "Carros": ["33", "27", "23", "24"],
+            "Vans": ["5", "1", "2", "2"],
+            "Caminhões": ["13", "17", "24", "24"],
+        }
+    )
+    
+    
+    df_meteorologia = pd.DataFrame(
+        {
+            "Métrica": ["Temperatura", "Vel. Vento", "Radiação  Solar", "Precipitação"],
+            "Medida": ["1880 °C", "0,2 m/s", "549 MJ/h", "30 mm"],
+        }
+    )
+
+    df_hidrometro = pd.DataFrame(
+        {
+            "Métrica": ["Consumo Hoje", "Consumo este mês", "Valor Hidrômetro"],
+            "Medida": ["443 m3", "1.552 m3", "809K m3"],
+        }
+    )
+    
+
+    df_table_alunos = pd.DataFrame(
+        {
+            "Alunos": ["Tecnólogo", "Graduação", "Pós"],
+            "Quantidade": ["1880", "20301", "1800"],
+        }
+    )
+
+    df_table_cursos = pd.DataFrame(
+        {
+            "Cursos": ["Tecnólogos", "Graduação", "Pós"],
+            "Quantidade": ["8", "80", "60"],
+        }
+    )
+
+    df_table_funcionarios = pd.DataFrame(
+        {
+            "Funcionários": ["Estagiários", "Técnicos", "Docentes"],
+            "Quantidade": ["17", "4560", "279"],
+            "Vagas Abertas":["5", "78", "28"],
+        }
+    )
+
+
+
+
+    df_completo_estados = pd.DataFrame(
+        {   
+            "mes": ["Setembro/21", "Outubro/21", "Novembro/21"],
+            "abertos": [67, 60, 90],
+            "fechados": [60, 50, 70],
+            "acumulados": [7, 17, 37],
+        }
+    )
+
+    df_completo_estados.set_index("mes")
+    
+    chart_estados = go.Figure()
+    chart_estados.add_trace(go.Bar(
+        x=df_completo_estados['mes'],
+        y=df_completo_estados['abertos'],
+        name='Abertos',
+        marker_color='#FF6353',
+    ))
+
+    chart_estados.add_trace(go.Bar(
+        x=df_completo_estados['mes'],
+        y=df_completo_estados['fechados'],
+        name='Fechados',
+        marker_color='lightsalmon',
+    ))
+
+    chart_estados.add_trace(go.Bar(
+        x=df_completo_estados['mes'],
+        y=df_completo_estados['acumulados'],
+        name='Acumulados',
+        marker_color='#FEBD11',
+    ))
+    
+    chart_estados.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
+    chart_estados.update_layout(barmode='group',
+                                paper_bgcolor='#303140',
+                                plot_bgcolor='rgba(0,0,0,0)',
+                                font={'color':'white', "family":"Montserrat"},
+                                margin=dict(l=0, r=0, t=0, b=0),
+                                height=225,
+                                xaxis_title="Mês",
+                                yaxis_title='Quantidade de Chamados',
+                                )
+
+
+
+
+
+
+
     df = px.data.stocks()
     fig_line_1 = px.line(df, x='date', y="GOOG")
     fig_line_1.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
@@ -142,9 +245,13 @@ def app_content(charts, clean_data):
         margin=dict(l=0, r=0, t=0, b=0),
     )
 
-    chart_bubble_1 = [        
-                dcc.Graph(figure=fig_bubble_1,
-                animate=True, config=config_plots),
+    chart_bubble_1 = [
+        dbc.CardHeader("Acumulados", className='cards-content-info-header'),
+        dbc.CardBody(
+            [
+                dcc.Graph(figure=fig_bubble_1,animate=True, config=config_plots),
+            ],
+            className="cards-info-body"),
     ]
 
 
@@ -231,6 +338,19 @@ def app_content(charts, clean_data):
 
 
 
+    chart_bubble_1 = [
+        dbc.CardHeader("Acumulados", className='cards-content-info-header'),
+        dbc.CardBody(
+            [
+                dcc.Graph(figure=fig_bubble_1,animate=True, config=config_plots),
+                dcc.Graph(figure=fig_lines_2,animate=True, config=config_plots),
+                dcc.Graph(figure=fig_lines_3,animate=True, config=config_plots),
+            ],
+            className="cards-info-body"),
+    ]
+
+
+
     d = {'Predio':['Reitoria','STD','CEGEN','DELOGS'], 'Chamados': [3000, 4000, 5000, 6000], 'lat':['-8.014212','-8.018282','-8.017475','-8.015940'], 'lon':['-34.950411','-34.949333','-34.950096','-34.946378']}
     df = pd.DataFrame(data=d)
     df["lat"] = pd.to_numeric(df["lat"], downcast="float")
@@ -250,272 +370,348 @@ def app_content(charts, clean_data):
         paper_bgcolor='#303140',
         plot_bgcolor='#303140',
         font={'color':'white', "family":"Montserrat"},
-        width=935,
-        height=330,
+        height=230,
         )
 
 
 
     chart_map_1 = [        
             dcc.Graph(figure=fig_map_1,
+                animate=True, config=config_plots),
+    ]
+
+
+    chart_chamados = [
+        dcc.Graph(figure=chart_estados,
             animate=True, config=config_plots),
     ]
 
 
 
-
-    row_1 = html.Div(
-        [
-            dbc.Row(
-                [
-                    dbc.Card(
-                        dbc.Row([
-                            dbc.Col(
-                                daq.Gauge(
-                                    id='my-gauge-app1-1',
-                                    #showCurrentValue=True,
-                                    color={
-                                        "gradient": True,
-                                        "ranges": {"green": [0, 4], "red": [4, 10]},
-                                    },
-                                    value=7,
-                                    scale={"start": 0, "interval": 1, "labelInterval": 2},
-                                    label="Default Gauge",
-                                    max=10,
-                                    min=0,),
-                            className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                            dbc.Col(
-                                daq.Gauge(
-                                    id='my-gauge-app1-2',
-                                    #showCurrentValue=True,
-                                    color={
-                                        "gradient": True,
-                                        "ranges": {"green": [0, 2000], "red": [2000, 10000]},
-                                    },
-                                    value=7000,
-                                    scale={"start": 0, "interval": 500, "labelInterval": 3},
-                                    label="Default Gauge",
-                                    max=10000,
-                                    min=0,),
-                            className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                            dbc.Col(
-                                daq.Gauge(
-                                    id='my-gauge-app1-3',
-                                    #showCurrentValue=True,
-                                    color={
-                                        "gradient": True,
-                                        "ranges": {"green": [0, 2000], "red": [2000, 10000]},
-                                    },
-                                    value=434,
-                                    scale={"start": 0, "interval": 500, "labelInterval": 3},
-                                    label="Default Gauge",
-                                    max=10000,
-                                    min=0,),
-                                className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                        ]), 
-                    className='shadow cards-info'),
+    row_1 = html.Div([
                 
-                    dbc.Card(
-                        dbc.Row([
+                dbc.Row([ # first of the dashboard
+                    dbc.Col([ # first column of the first row, it takes 10 columns of the bootstrap
+                        dbc.Row([ # first row in the first column
                             dbc.Col(
-                                daq.Gauge(
-                                    id='my-gauge-app1-4',
-                                    #showCurrentValue=True,
-                                    color={
-                                        "gradient": True,
-                                        "ranges": {"blue": [0, 4], "yellow": [4, 10]},
-                                    },
-                                    value=7,
-                                    scale={"start": 0, "interval": 1, "labelInterval": 2},
-                                    label="Default Gauge",
-                                    max=10,
-                                    min=0,),
-                            className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                            dbc.Col(
-                                daq.Gauge(
-                                    id='my-gauge-app1-5',
-                                    #showCurrentValue=True,
-                                    color={
-                                        "gradient": True,
-                                        "ranges": {"blue": [0, 2000], "yellow": [2000, 10000]},
-                                    },
-                                    value=7000,
-                                    scale={"start": 0, "interval": 500, "labelInterval": 3},
-                                    label="Default Gauge",
-                                    max=10000,
-                                    min=0,),
-                            className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                            dbc.Col(
-                                daq.Gauge(
-                                    id='my-gauge-app1-6',
-                                    #showCurrentValue=True,
-                                    color={
-                                        "gradient": True,
-                                        "ranges": {"blue": [0, 2000], "yellow": [2000, 10000]},
-                                    },
-                                    value=434,
-                                    scale={"start": 0, "interval": 500, "labelInterval": 3},
-                                    label="Default Gauge",
-                                    max=10000,
-                                    min=0,),
-                                className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                        ]),
-                    className='shadow cards-info'),
+                                dbc.Card([
+                                    dbc.CardHeader("Quantidade de Projetos por ODS", className='card-header-dashboard', style={'background':'#11456a'}),
+                                    dbc.CardBody([
+                                            dbc.Row([
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_01.png", className="ods-html-img"),
+                                                    html.P(10, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_02.png", className="ods-html-img"),
+                                                    html.P(15, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_03.png", className="ods-html-img"),
+                                                    html.P(1, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_04.png", className="ods-html-img"),
+                                                    html.P(12, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_05.png", className="ods-html-img"),
+                                                    html.P(9, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_06.png", className="ods-html-img"),
+                                                    html.P(2, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                            ]),
+                                            dbc.Row([
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_07.png", className="ods-html-img"),
+                                                    html.P(1, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_08.png", className="ods-html-img"),
+                                                    html.P(70, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_09.png", className="ods-html-img"),
+                                                    html.P(0, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_10.png", className="ods-html-img"),
+                                                    html.P(11, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_11.png", className="ods-html-img"),
+                                                    html.P(7, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_12.png", className="ods-html-img"),
+                                                    html.P(1, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                            ]),
+                                            dbc.Row([
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_13.png", className="ods-html-img"),
+                                                    html.P(0, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_14.png", className="ods-html-img"),
+                                                    html.P(0, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_15.png", className="ods-html-img"),
+                                                    html.P(11, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_16.png", className="ods-html-img"),
+                                                    html.P(17, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(html.Div([
+                                                    html.Img(src="/static/static/dashboards/images/ods_17.png", className="ods-html-img"),
+                                                    html.P(1, className="ods-html-p"),
+                                                ]),className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                                            ]),
 
-                    dbc.Card(
-                            dbc.Row([
-                                dbc.Col(
-                                    daq.Tank(
-                                        id='my-tank-1',
-                                        value=5,
-                                        min=0,
-                                        max=10,
-                                    ),
-                                className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                                dbc.Col(
-                                    daq.Tank(
-                                        id='my-tank-2',
-                                        value=2,
-                                        min=0,
-                                        max=10,
-                                    ),
-                                className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                                dbc.Col(
-                                    daq.Tank(
-                                        id='my-tank-3',
-                                        value=9,
-                                        min=0,
-                                        max=10,
-                                    ),
+                                            ], className="card-body-dashboard"),
+                                ], className='shadow card-dashboard'),
+                            className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                        
+                            dbc.Col(
+                                dbc.Card([
+                                    dbc.CardHeader("Tecnologias Digitais", className='card-header-dashboard', style={'background':'#fea501'}),
+                                    dbc.CardBody(chart_chamados, className="card-body-dashboard"),
+                                ], className='shadow card-dashboard'),
+                            className='col-lg-5 col-md-5 col-sm-12 col-xs-12 col-12'),
+
+                            dbc.Col(
+                                dbc.Card([
+                                    dbc.CardHeader("Mobilidade e Segurança", className='card-header-dashboard', style={'background':'#02b0ee'}),
+                                    dbc.CardBody(
+                                        html.Div([
+                                                dbc.Table.from_dataframe(df_mobilidade, striped=True, hover=True, dark=True),
+                                            ],className="div-table"), className="card-body-dashboard"),
+                                ], className='shadow card-dashboard'),
+                            className='col-lg-5 col-md-5 col-sm-12 col-xs-12 col-12'),
+                        
+                        ], className="row-dashboard"), # first row in first column
+
+
+
+
+                        dbc.Row([ # second row in the first column
+                            dbc.Col(
+                                dbc.Card([
+                                    dbc.CardHeader("Saúde e Qualidade de Vida", className='card-header-dashboard', style={'background':'#52a03b'}),
+                                    dbc.CardBody(html.Div([
+                                        html.I(className="fa fa-user-md fa-4x"),
+                                        html.P("Número de Atestados nos Últimos 30 dias", className="saude-html-p"),
+                                        html.P(37, className="saude-html-p"),
+                                    ], className="saude-html-div"), className="card-body-dashboard"),
+                                ], className='shadow card-dashboard'),
+                            className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                        
+                            dbc.Col(
+                                dbc.Card([
+                                    dbc.CardHeader("Infraestrutura e Urbanismo", className='card-header-dashboard', style={'background':'#fa6623'}),
+                                    dbc.CardBody(
+                                            dbc.Row([
+                                                dbc.Col(
+                                                    daq.Tank(
+                                                        id='my-tank-1',
+                                                        value=5,
+                                                        min=0,
+                                                        max=10,
+                                                    ),
+                                                className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(
+                                                    daq.Tank(
+                                                        id='my-tank-2',
+                                                        value=2,
+                                                        min=0,
+                                                        max=10,
+                                                    ),
+                                                className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                                                dbc.Col(
+                                                    daq.Tank(
+                                                        id='my-tank-3',
+                                                        value=9,
+                                                        min=0,
+                                                        max=10,
+                                                    ),
+                                                    className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                                        ]), className="card-body-dashboard"),
+                                ], className='shadow card-dashboard'),
+                            className='col-lg-5 col-md-5 col-sm-12 col-xs-12 col-12'),
+                            
+                            dbc.Col(
+                                dbc.Card([
+                                    dbc.CardHeader("Negócio e Indústria", className='card-header-dashboard', style={'background':'#fb9d24'}),
+                                    dbc.CardBody(chart_line_1, className="card-body-dashboard"),
+                                ], className='shadow card-dashboard'),
+                            className='col-lg-5 col-md-5 col-sm-12 col-xs-12 col-12'),
+
+                        ], className="row-dashboard"), # second row in first column
+
+                        
+
+
+                    ], className='col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12'),
+
+
+                    dbc.Col( # second column of the first row
+                        dbc.Card([
+                            dbc.CardHeader("Meio Ambiente", className='card-header-dashboard', style={'background':'#437c44'}),
+                                dbc.CardBody(
+                                    dbc.Row([
+                                        dbc.Col(
+                                            html.Div([
+                                                html.P("Estação Meteorológica"),
+                                                dbc.Table.from_dataframe(df_meteorologia, striped=True, hover=True, dark=True),
+                                                html.P("Hidrômetro"),
+                                                dbc.Table.from_dataframe(df_hidrometro, striped=True, hover=True, dark=True),
+                                            ],className="div-table"),
+                                        className='col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12'),
+                                ]), className="card-body-dashboard"),
+                        ], className='shadow card-dashboard'),
+                    className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+
+
+                    dbc.Col( # second column of the first row
+                        dbc.Card([
+                            dbc.CardHeader("Educação", className='card-header-dashboard', style={'background':'#c8152e'}),
+                                dbc.CardBody(
+                                    dbc.Row([
+                                        dbc.Col(
+                                            html.Div([
+                                                dbc.Table.from_dataframe(df_table_alunos, striped=True, hover=True, dark=True),
+                                                dbc.Table.from_dataframe(df_table_cursos, hover=True, dark=True),
+                                                dbc.Table.from_dataframe(df_table_funcionarios, hover=True, dark=True),
+                                            ],className="div-table"),
+                                        className='col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12'),
+                                ]), className="card-body-dashboard"),
+                        ], className='shadow card-dashboard'),
+                    className='col-lg-2 col-md-2 col-sm-12 col-xs-12 col-12'),
+                
+                ], className="row-dashboard"),
+        ]
+    )
+
+
+    row_2 = html.Div([
+                dbc.Row([   
+                    dbc.Col([
+                        dbc.Card([
+                            dbc.CardHeader("Energia", className='card-header-dashboard', style={'background':'#fbc40a'}),
+                            dbc.CardBody(
+                                    dbc.Row([
+                                        dbc.Col(
+                                            daq.Gauge(
+                                                id='my-gauge-app1-1',
+                                                #showCurrentValue=True,
+                                                color={
+                                                    "gradient": True,
+                                                    "ranges": {"green": [0, 4], "red": [4, 10]},
+                                                },
+                                                value=7,
+                                                scale={"start": 0, "interval": 1, "labelInterval": 2},
+                                                label="Default Gauge",
+                                                max=10,
+                                                min=0,),
+                                        className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                                        dbc.Col(
+                                            daq.Gauge(
+                                                id='my-gauge-app1-2',
+                                                #showCurrentValue=True,
+                                                color={
+                                                    "gradient": True,
+                                                    "ranges": {"green": [0, 2000], "red": [2000, 10000]},
+                                                },
+                                                value=7000,
+                                                scale={"start": 0, "interval": 500, "labelInterval": 3},
+                                                label="Default Gauge",
+                                                max=10000,
+                                                min=0,),
+                                        className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                                        dbc.Col(
+                                            daq.Gauge(
+                                                id='my-gauge-app1-3',
+                                                #showCurrentValue=True,
+                                                color={
+                                                    "gradient": True,
+                                                    "ranges": {"green": [0, 2000], "red": [2000, 10000]},
+                                                },
+                                                value=434,
+                                                scale={"start": 0, "interval": 500, "labelInterval": 3},
+                                                label="Default Gauge",
+                                                max=10000,
+                                                min=0,),
+                                            className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                                    ]), className="card-body-dashboard"),
+                        ], className='shadow card-dashboard'),
+                    ], className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                
+                    dbc.Col([
+                        dbc.Card([
+                            dbc.CardHeader("Energia", className='card-header-dashboard', style={'background':'#fbc40a'}),
+                            dbc.CardBody(
+                                dbc.Row([
+                                    dbc.Col(
+                                        daq.Gauge(
+                                            id='my-gauge-app1-4',
+                                            #showCurrentValue=True,
+                                            color={
+                                                "gradient": True,
+                                                "ranges": {"blue": [0, 4], "yellow": [4, 10]},
+                                            },
+                                            value=7,
+                                            scale={"start": 0, "interval": 1, "labelInterval": 2},
+                                            label="Default Gauge",
+                                            max=10,
+                                            min=0,),
                                     className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                            ]),
-                    className='shadow cards-info'),
-
-
-                    dbc.Card(chart_line_1,className='shadow cards-info'),
-                
-                ],
-            ),
-        ]
-    )
-
-
-
-    row_2 = html.Div(
-        [
-            dbc.Row(
-                [
-                    dbc.Card(
-                        dbc.Row([
-                            dbc.Col(
-                                daq.GraduatedBar(
-                                    id="row_2my-graduatedbar-1",
-                                    color={"gradient":True,"ranges":{"green":[0,4],"yellow":[4,7],"red":[7,10]}},
-                                    showCurrentValue=True,
-                                    value=7.5,
-                                ),
-                            className='col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12'),
-                        ]), 
-                    className='shadow cards-info'),
-                
-                    dbc.Card(
-                        dbc.Row([
-                            dbc.Col(
-                                daq.Gauge(
-                                    id='row_2my-gauge-app1-4',
-                                    #showCurrentValue=True,
-                                    color={
-                                        "gradient": True,
-                                        "ranges": {"orange": [0, 4], "green": [4, 10]},
-                                    },
-                                    value=7,
-                                    scale={"start": 0, "interval": 1, "labelInterval": 2},
-                                    label="Default Gauge",
-                                    max=10,
-                                    min=0,),
-                            className='col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12'),
-                            dbc.Col(
-                                daq.Gauge(
-                                    id='row_2my-gauge-app1-5',
-                                    #showCurrentValue=True,
-                                    color={
-                                        "gradient": True,
-                                        "ranges": {"orange": [0, 2000], "green": [2000, 10000]},
-                                    },
-                                    value=7000,
-                                    scale={"start": 0, "interval": 500, "labelInterval": 3},
-                                    label="Default Gauge",
-                                    max=10000,
-                                    min=0,),
-                            className='col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12'),
-                        ]),
-                    className='shadow cards-info'),
-
-                    dbc.Card(chart_line_1,className='shadow cards-info'),
-
-                    dbc.Card(chart_sunburst_1,className='shadow cards-info'),
-
-                    dbc.Card(chart_bar_1,className='shadow cards-info'),
-                
-                ],
-            ),
-        ]
-    )
-
-
-
-
-
-    row_3 = html.Div(
-        [
-            dbc.Row(
-                [
-                    dbc.Card(chart_bubble_1,className='shadow cards-info'),
-                
-                    dbc.Card(chart_lines_2,className='shadow cards-info'),
-
-                    dbc.Card(chart_lines_3,className='shadow cards-info'),
+                                    dbc.Col(
+                                        daq.Gauge(
+                                            id='my-gauge-app1-5',
+                                            #showCurrentValue=True,
+                                            color={
+                                                "gradient": True,
+                                                "ranges": {"blue": [0, 2000], "yellow": [2000, 10000]},
+                                            },
+                                            value=7000,
+                                            scale={"start": 0, "interval": 500, "labelInterval": 3},
+                                            label="Default Gauge",
+                                            max=10000,
+                                            min=0,),
+                                    className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                                    dbc.Col(
+                                        daq.Gauge(
+                                            id='my-gauge-app1-6',
+                                            #showCurrentValue=True,
+                                            color={
+                                                "gradient": True,
+                                                "ranges": {"blue": [0, 2000], "yellow": [2000, 10000]},
+                                            },
+                                            value=434,
+                                            scale={"start": 0, "interval": 500, "labelInterval": 3},
+                                            label="Default Gauge",
+                                            max=10000,
+                                            min=0,),
+                                        className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                                    ]), className="card-body-dashboard"),
+                        ], className='shadow card-dashboard'),
+                    ], className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
                     
-
-                    dbc.Card(
-                            dbc.Row([
-                                dbc.Col(
-                                    daq.Tank(
-                                        id='row_3my-tank-1',
-                                        value=5,
-                                        min=0,
-                                        max=10,
-                                    ),
-                                className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                                dbc.Col(
-                                    daq.Tank(
-                                        id='row_3my-tank-2',
-                                        value=2,
-                                        min=0,
-                                        max=10,
-                                    ),
-                                className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                                dbc.Col(
-                                    daq.Tank(
-                                        id='row_3my-tank-3',
-                                        value=9,
-                                        min=0,
-                                        max=10,
-                                    ),
-                                    className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
-                            ]),
-                    className='shadow cards-info'),
-
-                ],
-            ),
-        ]
-    )
+                    dbc.Col([
+                        dbc.Card([
+                            dbc.CardHeader("Energia", className='card-header-dashboard', style={'background':'#fbc40a'}),
+                            dbc.CardBody(chart_map_1, className="card-body-dashboard"),
+                        ], className='shadow card-dashboard'),
+                    ], className='col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12'),
+                ], className="row-dashboard"),
+        ])
 
 
-
-
-
-    row_4 = html.Div(
+    row_5 = html.Div(
         [
             dbc.Row(
                 [
@@ -533,7 +729,7 @@ def app_content(charts, clean_data):
 
 
 
-    return html.Div([html.Div([row_1,row_2,row_3,row_4])])
+    return html.Div([html.Div([row_1,row_2])])
 
 
 def layout(clean_data):

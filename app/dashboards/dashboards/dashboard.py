@@ -23,13 +23,17 @@ def server_layout():
     """
     #clean_data_update = cleaning_data()
     clean_data_update = None
+    #server_layout = html.Div([
+    #    dbc.Tabs([dbc.Tab(app_1.layout(clean_data_update), label="Tab 1", tab_id='tab-1', tab_style={"marginLeft": "auto"}),
+    #                dbc.Tab(app_2.layout(clean_data_update), label="Tab 2", tab_id='tab-2'),
+    #                ], active_tab="tab-1", id="tabs", className='mb-3'),
+    #    # interval = 10*60*1000 meaning minutes*seconds*milliseconds
+    #    dcc.Interval(id='interval-component',interval=10*60*1000, n_intervals=0),
+    #    ])
     server_layout = html.Div([
-        dbc.Tabs([dbc.Tab(app_1.layout(clean_data_update), label="Tab 1", tab_id='tab-1', tab_style={"marginLeft": "auto"}),
-                    dbc.Tab(app_2.layout(clean_data_update), label="Tab 2", tab_id='tab-2'),
-                    ], active_tab="tab-1", id="tabs", className='mb-3'),
-        # interval = 10*60*1000 meaning minutes*seconds*milliseconds
-        dcc.Interval(id='interval-component',interval=10*60*1000, n_intervals=0),
-        ])
+        app_1.layout(clean_data_update)
+    ])
+
     return server_layout
 
 @app.callback(Output('tabs', 'children'),[Input('interval-component', 'n_intervals')])
