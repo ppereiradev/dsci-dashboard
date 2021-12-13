@@ -119,10 +119,29 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': os.getenv('MONGODB_DB'),
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': os.getenv("MONGODB_HOST"),
+            'port': int(os.getenv('MONGODB_PORT')),
+            'username': os.getenv('MONGODB_USER'),
+            'password': os.getenv('MONGODB_PASSWORD'),
+            'authSource': 'admin',
+            'authMechanism': 'SCRAM-SHA-1'
+        },
+        'LOGGING': {
+            'version': 1,
+            'loggers': {
+                'djongo': {
+                    'level': 'DEBUG',
+                    'propagate': False,                        
+                }
+            },
+            },
     }
 }
+
 
 
 # Password validation
