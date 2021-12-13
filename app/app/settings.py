@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     #my apps
     'accounts.apps.AccountsConfig',
     'dashboards.apps.DashboardsConfig',
+    'website.apps.WebsiteConfig',
 ]
 
 # DJANGO-PLOTLY-DASH
