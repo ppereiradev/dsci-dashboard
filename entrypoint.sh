@@ -31,4 +31,4 @@ python manage.py migrate django_plotly_dash --fake --noinput
 
 python manage.py collectstatic --noinput
 
-gunicorn dsc_dashboard.wsgi:application --bind 0.0.0.0:8000
+gunicorn app.wsgi:application --bind 0.0.0.0:8000
