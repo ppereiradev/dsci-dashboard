@@ -19,7 +19,7 @@ RUN python -m venv /home/user/venv && \
     mkdir -p /home/user/vol/web/static && \
     chown -R user:user /home/user
     
-USER user
+USER root
 
 ENV PATH="/home/user/venv/bin:$PATH"
 
