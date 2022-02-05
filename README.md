@@ -8,9 +8,9 @@ https://www.bmc.com/blogs/mongodb-docker-container/
 tutorial: https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
 
 Change ownership of volume in docker volumes:
-
+```bash
 (ubuntu): chown -R $USER:$USER /var/lib/docker/volumes/volume-name
-
+```
 then build the image:
 ```bash
 docker-compose build --build-arg UID=$(id -u) && docker-compose up -d
