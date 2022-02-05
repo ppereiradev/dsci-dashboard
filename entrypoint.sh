@@ -29,22 +29,6 @@ python manage.py default_users --superuser=yes --username=$DJANGO_SUPERUSER_USER
     --email=$DJANGO_SUPERUSER_EMAIL \
     --password=$DJANGO_SUPERUSER_PASSWORD
 
-# adding user diretoria
-python manage.py default_users --username=$DJANGO_DIRETORIA_USERNAME \
-    --email=$DJANGO_DIRETORIA_EMAIL \
-    --password=$DJANGO_DIRETORIA_PASSWORD
-
-# adding user corporativa
-python manage.py default_users --username=$DJANGO_CORPORATIVAS_USERNAME \
-    --email=$DJANGO_CORPORATIVAS_EMAIL \
-    --password=$DJANGO_CORPORATIVAS_PASSWORD
-
-# adding user conectividade
-python manage.py default_users --username=$DJANGO_CONECTIVIDADE_USERNAME \
-    --email=$DJANGO_CONECTIVIDADE_EMAIL \
-    --password=$DJANGO_CONECTIVIDADE_PASSWORD
-
-
 python manage.py collectstatic --noinput
 
 gunicorn app.wsgi:application --bind 0.0.0.0:8000
